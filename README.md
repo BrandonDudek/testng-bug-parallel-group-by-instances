@@ -1,4 +1,4 @@
-# testng-bug
+# testng-bug-parallel-group-by-instances
 Sample code show that when you use
  **group-by-instances="true"** with **parallel="instances"**
  the Test Suite is ran in a single thread.
