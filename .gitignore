@@ -16,6 +16,5 @@ buildNumber.properties
 .idea/
 !.idea/misc.xml
 !.idea/modules.xml
-!.idea/testng-bug.iml
-target
+!.idea/testng-bug-parallel-group-by-instances.iml
 

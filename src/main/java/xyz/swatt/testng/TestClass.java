@@ -4,25 +4,23 @@ import org.testng.annotations.*;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
 
 /**
  * The Class doing the Tests.
  */
 public class TestClass {
 
-    @DataProvider
+    @DataProvider(parallel = true)
     public static Iterator< Object[] > factoryDataProvider() {
 
         System.out.println("Factory\tDataProvider");
 
-        final int COUNT = 13;
+        final int COUNT = 3;
 
-        List<Object[]> toRet = new ArrayList( COUNT );
+        ArrayList<Object[]> toRet = new ArrayList( COUNT );
 
         for( int i = 0; i < COUNT; i++ ) {
-            char c = (char) ( 'a' + new Random().nextInt( 26 ) );
+            char c = (char) ( 'A' + i );
             toRet.add( new Object[] { String.valueOf(c) } );
         }
 
@@ -41,63 +39,90 @@ public class TestClass {
 
     @BeforeSuite
     public void beforeSuite() {
-        System.out.println("Before\tSuite");
+        System.out.println("Before\tSuite " + INSTANCE_NAME);
     }
 
     @BeforeTest
     public void beforeTest() {
-        System.out.println("Before\tTest");
+        System.out.println("Before\tTest " + INSTANCE_NAME);
     }
 
     @BeforeClass
     public void beforeClass() {
-        System.out.println("Before\tClass");
+        System.out.println("Before\tClass " + INSTANCE_NAME);
     }
 
     @BeforeMethod
     public void beforeMethod() {
-        System.out.println("Before\tMethod");
+        System.out.println("Before\tMethod " + INSTANCE_NAME);
     }
 
-    @DataProvider
-    public Iterator< Object[] > testMethodDataProvider() {
+    @Test
+    public void testMethod1() {
 
-        System.out.println("TestMethod\tDataProvider");
+        for( int i = 0; i < 10; i++ ) {
 
-        final int COUNT = 3;
+            System.out.println("Test\tMethod " + INSTANCE_NAME + "-1");
 
-        List<Object[]> toRet = new ArrayList( COUNT );
-
-        for( int i = 0; i < COUNT; i++ ) {
-            toRet.add( new Object[] { String.valueOf(i) } );
+            try {
+                Thread.sleep( 1000 );
+            }
+            catch( InterruptedException e ) {
+                continue;
+            }
         }
-
-        return toRet.iterator();
     }
 
-    @Test(dataProvider = "testMethodDataProvider")
-    public void testMethod(String _testName) {
-        System.out.println("Test\tMethod " + INSTANCE_NAME + "-" + _testName);
+    @Test(dependsOnMethods = "testMethod1")
+    public void testMethod2() {
+
+        for( int i = 0; i < 10; i++ ) {
+
+            System.out.println("Test\tMethod " + INSTANCE_NAME + "-2");
+
+            try {
+                Thread.sleep( 1000 );
+            }
+            catch( InterruptedException e ) {
+                continue;
+            }
+        }
+    }
+
+    @Test(dependsOnMethods = "testMethod2")
+    public void testMethod3() {
+
+        for( int i = 0; i < 10; i++ ) {
+
+            System.out.println("Test\tMethod " + INSTANCE_NAME + "-3");
+
+            try {
+                Thread.sleep( 1000 );
+            }
+            catch( InterruptedException e ) {
+                continue;
+            }
+        }
     }
 
     @AfterMethod
     public void afterMethod() {
-        System.out.println("After\tMethod");
+        System.out.println("After\tMethod " + INSTANCE_NAME);
     }
 
     @AfterClass
     public void afterClass() {
-        System.out.println("After\tClass");
+        System.out.println("After\tClass " + INSTANCE_NAME);
     }
 
     @AfterTest
     public void afterTest() {
-        System.out.println("After\tTest");
+        System.out.println("After\tTest " + INSTANCE_NAME);
     }
 
     @AfterSuite
     public void AfterSuite() {
-        System.out.println("After\tSuite");
+        System.out.println("After\tSuite " + INSTANCE_NAME);
     }
 
     @Override
